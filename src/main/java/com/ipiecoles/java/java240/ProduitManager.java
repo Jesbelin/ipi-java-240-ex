@@ -1,23 +1,34 @@
 package com.ipiecoles.java.java240;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
+import javax.annotation.Resource;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-@Service
+@Component
 public class ProduitManager {
 
     private List<Produit> produits = new ArrayList<>();
 
+    @Value("${catalogue.url}")
+    private String catalogueUrl;
+
+    //Injecté automatiquement par Spring (@Component sur ProduitManager et sur WebPageManager)
     @Autowired
     private WebPageManager webPageManager;
 
+    @Resource(name = "disableSSL")
+    private Object disableSSl;
+
     @Autowired
+    @Qualifier("cache")
     private BitcoinService bitcoinService;
 
     /**
@@ -39,6 +50,7 @@ public class ProduitManager {
 
         produits.add(new Produit(intitule, prixEuro));
     }
+    
 
     /**
      * Méthode qui affiche tous les produits du catalogue
@@ -54,6 +66,7 @@ public class ProduitManager {
      * @throws IOException
      */
     public void afficherDetailProduit(Integer index) throws IOException {
+        //BitcoinService bitcoinService = new BitcoinService();
         System.out.println(produits.get(index).toString() + ", " + bitcoinService.getBitcoinPrice(produits.get(index).getPrixEuro()) + " BTC");
     }
 
@@ -63,7 +76,7 @@ public class ProduitManager {
      */
     @PostConstruct
     public void initialiserCatalogue() throws IOException {
-        String catalogue = webPageManager.getPageContentsFromCacheIfExists("https://pjvilloud.github.io/ipi-java-240-cours/catalogue.txt");
+        String catalogue = webPageManager.getPageContentsFromCacheIfExists(catalogueUrl);
         int nbProduits = 0;
         for(String line : catalogue.split("\n")){
             String[] elements = line.split(";");
