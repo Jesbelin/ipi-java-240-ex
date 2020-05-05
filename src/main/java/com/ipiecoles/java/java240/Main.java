@@ -10,7 +10,7 @@ import java.util.Scanner;
 @Component
 public class Main implements CommandLineRunner {
 
-    @Resource(name = "refreshBitCoinService")
+    @Resource(name = "bitcoinServiceCacheProperty")
     private BitcoinService bitcoinService;
 
     @Autowired
