@@ -9,6 +9,22 @@ public class ProduitManager {
 
     private List<Produit> produits = new ArrayList<>();
 
+    private WebPageManager webPageManager;
+
+    private BitcoinService bitcoinService;
+
+    public WebPageManager getWebPageManager() {
+        return webPageManager;
+    }
+
+    public void setWebPageManager(WebPageManager webPageManager) {
+        this.webPageManager = webPageManager;
+    }
+
+    public  BitcoinService getBitcoinService() { return bitcoinService; }
+
+    public void setBitcoinService (BitcoinService bitcoinService) { this.bitcoinService = bitcoinService; }
+
     /**
      * Méthode qui demande les caractéristiques d'un nouveau produit
      * à l'utilisateur et qui l'ajoute au catalogue
@@ -53,7 +69,7 @@ public class ProduitManager {
      */
     public void initialiserCatalogue() throws IOException {
         WebPageManager webPageManager = new WebPageManager();
-        String catalogue = webPageManager.getPageContentsFromCacheIfExists("https://pjvilloud.github.io/ipi-java-240-cours/catalogue.txt");
+        String catalogue = webPageManager.getPageContentsFromCacheIfExists("file:C:/Users/jennifer.esbelin/Documents/Cours/Java/Spring/Documents/catalogue.txt");
         int nbProduits = 0;
         for(String line : catalogue.split("\n")){
             String[] elements = line.split(";");
